@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src='js/jquery-3.0.0.min.js'></script>
+    <style>
+      /*body{*/
+            /*perspective: 500px;}*/
+
+        .container {
+            list-style: none;
+            padding: 0;
+            margin: 100px auto;
+            width: 560px;
+            height: 380px;
+            border: 1px solid gray;
+            position: relative;
+            display: flex;
+        }
+        li{
+            width: 33.33333%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 1s;
+        }
+        li>div{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+        a {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            font-size: 40px;
+            background-color: gray;
+            line-height: 50px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+        }
+        .left{
+            top:50%;
+            left: -50px;
+            transform: translateY(-25px);
+        }
+        .right{
+            top:50%;
+            right: -50px;
+            transform: translateY(-25px);
+        }
+        .first{
+            background: url("imgs/01.jpg") no-repeat;
+            transform: rotateX(0deg) translateZ(190PX);
+        }
+        .second{
+            background: url("imgs/02.jpg") no-repeat;
+            transform: rotateX(-90deg) translateZ(190PX);
+        }
+        .third{
+            background: url("imgs/03.jpg") no-repeat;
+            transform: rotateX(-180deg) translateZ(190PX);
+
+        }
+        .four{
+            background: url("imgs/04.jpg") no-repeat;
+            transform: rotateX(-270deg) translateZ(190PX);
+        }
+        li:nth-child(2){
+            transition: all 1s .1s;
+        }
+        li:nth-child(2)>div{
+            background-position: -186.66648px 0;
+        }
+      li:nth-child(3){
+            transition: all 1s .2s;
+        }
+        li:nth-child(3)>div{
+            background-position: -373.33333px 0;
+        }
+    </style>
+    <script>
+        var clickCont=0;
+        $(function () {
+            $(".left").click(function () {
+                clickCont--;
+                $("li").css({transform:'rotateX('+clickCont*90+'deg)'})
+            })
+            $(".right").click(function () {
+                clickCont++;
+                $("li").css({transform:'rotateX('+clickCont*90+'deg)'})
+            })
+        })
+    </script>
+</head>
+<body>
+<ul class="container">
+   <li>
+       <div class="first"></div>
+       <div class="second"></div>
+       <div class="third"></div>
+       <div class="four"></div>
+   </li>
+    <li>
+       <div class="first"></div>
+       <div class="second"></div>
+       <div class="third"></div>
+       <div class="four"></div>
+   </li>
+    <li>
+       <div class="first"></div>
+       <div class="second"></div>
+       <div class="third"></div>
+       <div class="four"></div>
+   </li>
+    <a href="javascript:void(0)" class="left">&lt;</a>
+    <a href="javascript:void(0)" class="right">&gt;</a>
+</ul>
+</body>
+</html>

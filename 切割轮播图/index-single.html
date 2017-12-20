@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		ul{
+			list-style: none;
+			padding: 0;
+			width: 560px;
+			height: 380px;
+			margin: 100px auto;
+			border: 1px solid gray;
+			position: relative;
+			display: flex;
+		}
+		li{
+			/* 两张版本 */
+			width: 50%;
+			height: 100%;
+			position: relative;
+			/* 让div在3d空间中 能够看到效果 */
+			transform-style: preserve-3d;
+			/* 添加过渡属性 */
+			transition: all 1s;
+		}
+		
+		/*  左右按钮 */
+		ul>a{
+			font-size: 40px;
+			color: white;
+			background-color: gray;
+			position: absolute;
+			width: 50px;
+			height: 50px;
+			text-align: center;
+			line-height: 50px;
+			text-decoration: none;
+			font-weight: 900;
+		}
+		ul .left{
+			left: -50px;
+			top: 50%;
+			transform: translateY(-25px);
+		}
+		ul .right{
+			right: -50px;
+			top: 50%;
+			transform: translateY(-25px);
+		}
+
+		li>div{
+			width: 100%;
+			height: 100%;
+			position: absolute;
+		}
+		.first{
+			background: url('imgs/01.jpg') no-repeat;
+			transform: rotateX(0deg) translateZ(190px);
+		}
+		.second{
+			background: url('imgs/02.jpg') no-repeat;
+			transform: rotateX(-90deg) translateZ(190px);
+		}
+		.third{
+			background: url('imgs/03.jpg') no-repeat;
+			transform: rotateX(-180deg) translateZ(190px);
+		}
+		.four{
+			background: url('imgs/04.jpg') no-repeat;
+			transform: rotateX(-270deg) translateZ(190px);
+		}
+
+		/* 设置 第二个区域的li标签内部 div backgroun的偏移值 */
+		li:nth-child(2){
+			transition: all 1s .1s;
+		}
+		li:nth-child(2)>div{
+			background-position: -280px 0;
+		}
+	</style>
+	<script type="text/javascript" src='js/jquery-3.0.0.min.js'></script>
+	<script type="text/javascript">
+
+		// 定义全局变量 计算 点击的次数
+		var clickCount = 0;
+
+		$(function  () {
+			$('.left').click(function (){
+				// 累加次数
+				clickCount--;
+
+				$('li').css({
+					transform:'rotateX('+clickCount*90+'deg)'
+				})
+			})
+			$('.right').click(function (){
+
+				// 累加次数
+				clickCount++;
+
+				$('li').css({
+					transform:'rotateX('+clickCount*90+'deg)'
+				})
+			})
+		})
+	</script>
+</head>
+<body>
+	<ul class='container'>
+		<li>
+			<div class='first'></div>
+			<div class='second'></div>
+			<div class='third'></div>
+			<div class='four'></div>
+		</li>
+		<li>
+			<div class='first'></div>
+			<div class='second'></div>
+			<div class='third'></div>
+			<div class='four'></div>
+		</li>
+		<a href="javascript:void(0)" class='left'>&lt;</a>
+		<a href="javascript:void(0)" class='right'>&gt;</a>
+	</ul>
+</body>
+</html>

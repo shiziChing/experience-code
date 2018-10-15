@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 将一天24小时按每半小划分成48段，我们用一个位图表示选中的时间区间，
+// 例如`110000000000000000000000000000000000000000000000`，
+// 表示第一个半小时和第二个半小时被选中了，其余时间段都没有被选中，
+// 也就是对应00:00~01:00这个时间区间。一个位图中可能有多个不连续的
+// 时间区间被选中，例如`110010000000000000000000000000000000000000000000`，
+// 表示00:00-1:00和02:00-02:30这两个时间区间被选中了。
+
+// 要求：写一个函数timeBitmapToRanges，将上述规则描述的时间位图转换成一个选中时间区间的数组。
+// 示例输入：`"110010000000000000000000000000000000000000000000"`
+// 示例输出：`["00:00~01:00", "02:00~02:30"]` 
+// 0              1                    2            3               4               5              6
+// 00:00 ~ 00:30  00:30 ~ 01:00    01:00 ~ 01:30    01:30 ~ 02:00   02:00 ~ 02:30   02:30 ~ 03:00  03:00 ~ 03:30
+// [{"start":0,"end":2}, {"start":4,"end":5}]
+
+function timeBitmapToRanges(val){
+    const sourceArr = val.split('')
+    let timeArr = []
+    let activeIndex = []
+    for(let i=0; i<sourceArr.length; i++ ){
+        if(sourceArr[i] == 1){
+            activeIndex.push(i)
+        }
+    }
+    // console.log(activeIndex)
+    parseIndex(activeIndex)
+}
+function parseIndex(arr){
+    let filterArr = fn(arr)
+    // console.log(filterArr)
+    let result = []
+    for(let i=0; i< filterArr.length; i++){
+        if(filterArr[i].length === 1){  // 就一项 没有连续
+            // result[i] = 
+            if(filterArr[i][0] % 2 === 0){
+                // console.log(filterArr[i][0])
+                const temp = filterArr[i][0] / 2
+                if(temp < 10){
+                    result[i] = `0${temp}:00~0${temp}:30`
+                }else{
+                    result[i] = `${temp}:00~${temp}:30`
+                }
+            }else{
+                const temp = filterArr[i][0] / 2
+                if(i !=1 ){
+                    if(temp < 10){
+                        result[i] = `0${Math.floor(temp)}:30~0${Math.ceil(temp)}:30`
+                    }else{
+                        result[i] = `${Math.floor(temp)}:00~${Math.ceil(temp)}:30`
+                    }
+                }else{
+                    result[i] = `00:30 ~ 01:00`
+                }
+            }
+        }else if(filterArr[i].length >1){  //  有连续的
+            const start = filterArr[i][0]
+            const end = filterArr[i][filterArr[i].length - 1]
+            // console.log(filterArr[i])
+            // console.log(start, end)
+            //  判断始末时间的奇偶性
+            if(start%2 === 0 && end%2 === 1){  //  始偶末奇
+                // console.log('始偶末奇')
+                result[i] = `${ tool(start/2) }:00~${ tool(Math.ceil(end/2)) }:00`
+            }else if(start%2 === 0 && end%2 === 0){   //  始偶末偶
+                result[i] = `${ tool(start/2) }:00~${ tool(end/2) }:30`
+            }else if(start%2 === 1 && end%2 === 1){  // 始奇末奇
+                result[i] = `${ tool(Math.floor(start/2)) }:00~${ tool(Math.ceil(end/2)) }:30`
+            } else if(start%2 === 1 && end%2 === 0){ // 始奇末偶
+                result[i] = `${ tool(Math.floor(start/2)) }:30~${ tool(end/2) }:30`
+            }
+            
+        }
+    }
+    console.log(result)
+    return result
+    
+}
+function tool(val) {
+    return val > 10 ? val : '0' + val
+}
+function fn(arr){
+    var result = [],
+    i = 0;
+    result[i] = [arr[0]];
+    arr.reduce(function(prev, cur){
+        cur-prev === 1 ? result[i].push(cur) : result[++i] = [cur];
+        return cur;
+    });
+    return result;
+}
+timeBitmapToRanges('110010110000000000000000000100000000000011100000')
+ 
+//  搞定
+
+// const testURL = 'https://www.youzan.com?list[]=a&list[]=b&name=coder&age=20&callback=https%3A%2F%2Fyouzan.com%3Fname%3Dtest#/login';
+
+// // list: ['a', 'b']
+
+// function parseParams(str){
+//     const needPArr = str.split('#')
+//     // console.log(needPArr)
+//     let paramsStr
+//     for(let item of needPArr){
+//         if(item.includes('?')){
+//             // console.log(item)
+//             paramsStr = item.split('?')[1]
+//             // console.log(item, paramsStr)
+//         }
+//     }
+    
+//     const paramsArr = paramsStr.split('&')
+//     const res = {}
+//     // console.log(paramsArr)
+//     let tempArr = []
+//     for(let item of paramsArr){
+//         const temp = item.split('=')
+//         // console.log(temp)
+//         let key = temp[0]
+//         let value
+        
+//         if(key.includes('[]')){
+//             key = key.split('[')[0]
+//             let tempVal = decodeURIComponent(temp[1])
+//             // console.log(tempArr)
+            
+//             if(res[key]){
+//                 console.log('1' + tempVal)
+//                 tempArr.push(tempVal)
+//             }else{
+//                 console.log('2' + tempVal)
+//                 tempArr = [tempVal]
+//                 res[key] = tempArr
+//             }
+//             value = tempArr
+
+//         }else{
+//             value = decodeURIComponent(temp[1])
+//         }
+        
+        
+        
+        
+//         res[key] = value
+//     }
+//     return res
+// }
+// console.log(parseParams(testURL))
+
+
+//  搞定
+    </script>
+</body>
+</html>

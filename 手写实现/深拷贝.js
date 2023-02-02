@@ -62,7 +62,21 @@ function deepCopy(obj, cache = new WeakMap()) {
 //     }
 // }
 // obj1.a = obj1
-let copyObj = cloneDeep(obj)
-console.log(copyObj)
+
 // console.log(copyObj.address === obj.address)  //false
 
+function cloneDeep(obj, cache = new WeakMap()) {
+    if(obj === null || typeof obj !== 'object'){
+        return obj;
+    }
+    if(cache.has(obj)) return cache.get(obj);
+
+    const cloneObj = new obj.constructor(obj);
+    for(const key in obj){
+        cloneObj[key] = cloneDeep(obj[key], cache);
+    }
+    cache.set(obj, cloneObj);
+    return cloneObj;
+}
+let copyObj = cloneDeep(obj1)
+console.log('00000----->', copyObj)
